@@ -4,7 +4,14 @@
     <section class="hero">
       <div class="container">
         <div class="hero__content">
-          <h1 class="hero__title">Discover the Best AI Tools for Any Task</h1>
+          <div class="hero__title-wrapper">
+            <h1 class="hero__title">Discover the Best AI Tools for Any Task</h1>
+            <div class="hero__title-decoration">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+          </div>
           <p class="hero__subtitle">
             Explore our curated collection of AI tools and applications to
             enhance your workflow and boost productivity.
@@ -18,11 +25,20 @@
           </div>
           <div class="hero__actions">
             <NuxtLink to="/categories" class="btn btn-primary">
-              Explore Categories
+              <span class="btn-text">Explore Categories</span>
+              <span class="btn-icon">→</span>
             </NuxtLink>
             <NuxtLink to="/about" class="btn btn-outline">
-              Learn More
+              <span class="btn-text">Learn More</span>
+              <span class="btn-icon">→</span>
             </NuxtLink>
+          </div>
+        </div>
+        <div class="hero__visual">
+          <div class="ai-waves">
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
           </div>
         </div>
       </div>
@@ -145,6 +161,8 @@
 </template>
 
 <script setup lang="ts">
+import type { Category, CategoriesResponse, ToolsResponse } from '~/types/categories'
+
 // SSR page for better SEO
 definePageMeta({
   layout: "default",
@@ -159,105 +177,26 @@ const emailInput = ref("");
 const { data: featuredCategories } = await useAsyncData(
   "featuredCategories",
   () => {
-    // In a real implementation, this would be an API call
-    return Promise.resolve([
-      {
-        id: "text-generation",
-        name: "Text Generation",
-        slug: "text-generation",
-        icon: "IconText",
-        description:
-          "AI tools for content creation, writing assistance, and text generation.",
-      },
-      {
-        id: "image-generation",
-        name: "Image Generation",
-        slug: "image-generation",
-        icon: "IconImage",
-        description:
-          "Create stunning visuals and artwork using AI-powered image generators.",
-      },
-      {
-        id: "audio-voice",
-        name: "Audio & Voice",
-        slug: "audio-voice",
-        icon: "IconAudio",
-        description:
-          "Voice synthesis, audio editing, and music generation powered by AI.",
-      },
-      {
-        id: "video-generation",
-        name: "Video Creation",
-        slug: "video-generation",
-        icon: "IconVideo",
-        description:
-          "Create and edit videos with AI-powered tools and effects.",
-      },
-      {
-        id: "productivity",
-        name: "Productivity",
-        slug: "productivity-organization",
-        icon: "IconProductivity",
-        description:
-          "Boost your workflow with AI assistants and automation tools.",
-      },
-      {
-        id: "coding",
-        name: "Coding & Development",
-        slug: "code-development",
-        icon: "IconCode",
-        description:
-          "AI-powered coding assistants, bug fixers, and development tools.",
-      },
-    ]);
+    return $fetch('/api/categories') as Promise<CategoriesResponse>;
+  },
+  {
+    transform: (data: CategoriesResponse) => {
+      return data?.featuredCategories?.slice(0, 8) || [];
+    },
   }
 );
 
-const { data: featuredTools } = await useAsyncData("featuredTools", () => {
-  // In a real implementation, this would be an API call
-  return Promise.resolve([
-    {
-      id: "chatgpt",
-      title: "ChatGPT",
-      description:
-        "Powerful AI assistant for text generation, answering questions, and creative writing.",
-      link: "https://chat.openai.com/",
-      pricing: "Free tier available, ChatGPT Plus at $20/month",
-      tags: ["conversational AI", "content generation", "writing assistant"],
-      categoryId: "text-generation",
+const { data: featuredTools } = await useAsyncData(
+  "featuredTools",
+  () => {
+    return $fetch('/api/tools') as Promise<ToolsResponse>;
+  },
+  {
+    transform: (data: ToolsResponse) => {
+      return data?.featuredTools || [];
     },
-    {
-      id: "midjourney",
-      title: "Midjourney",
-      description:
-        "AI image generator creating stunning, high-quality visuals from text descriptions.",
-      link: "https://www.midjourney.com/",
-      pricing: "Basic plan at $10/month, Standard at $30/month",
-      tags: ["image generation", "artistic", "design"],
-      categoryId: "image-generation",
-    },
-    {
-      id: "elevenlabs",
-      title: "ElevenLabs",
-      description:
-        "Advanced voice AI platform for realistic text-to-speech and voice cloning.",
-      link: "https://elevenlabs.io/",
-      pricing: "Free tier available, Starter plan at $5/month",
-      tags: ["voice synthesis", "text-to-speech", "voice cloning"],
-      categoryId: "audio-voice",
-    },
-    {
-      id: "github-copilot",
-      title: "GitHub Copilot",
-      description:
-        "AI pair programmer that suggests code completions based on context.",
-      link: "https://github.com/features/copilot",
-      pricing: "Individual plan at $10/month, Business plan at $19/user/month",
-      tags: ["code generation", "pair programming", "developer tool"],
-      categoryId: "coding",
-    },
-  ]);
-});
+  }
+);
 
 const { data: latestPosts } = await useAsyncData("latestPosts", () => {
   // In a real implementation, this would be an API call
@@ -303,10 +242,8 @@ const handleSearch = () => {
 };
 
 const getCategoryNameById = (categoryId: string): string => {
-  const category = featuredCategories.value?.find(
-    (cat) => cat.id === categoryId
-  );
-  return category ? category.name : "General";
+  const category = featuredCategories.value?.find((cat: Category) => cat.id === categoryId);
+  return category?.name || "General";
 };
 
 const formatDate = (dateString: string): string => {
@@ -379,17 +316,41 @@ useHead({
 .home-page {
   // Hero section
   .hero {
+    position: relative;
     background: linear-gradient(
       135deg,
-      lighten($primary-color, 25%),
-      lighten($secondary-color, 20%)
+      rgba(13, 17, 23, 0.95),
+      rgba(13, 17, 23, 0.95)
     );
     padding: $spacing-3xl 0;
     margin-bottom: $spacing-3xl;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('/images/hero-bg.png');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.1;
+      z-index: 0;
+    }
 
     &__content {
       max-width: 800px;
       margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    &__title-wrapper {
+      position: relative;
+      margin-bottom: $spacing-xl;
       text-align: center;
     }
 
@@ -397,41 +358,226 @@ useHead({
       font-size: $font-size-3xl;
       color: $heading-color;
       margin-bottom: $spacing-md;
+      font-weight: 800;
+      line-height: 1.2;
+      position: relative;
+      display: inline-block;
 
       @include breakpoint(md) {
-        font-size: $font-size-4xl;
+        font-size: $font-size-3xl;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          $primary-color,
+          $secondary-color
+        );
+        opacity: 0.5;
+      }
+    }
+
+    &__title-decoration {
+      display: flex;
+      justify-content: center;
+      gap: $spacing-sm;
+      margin-top: $spacing-md;
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: linear-gradient(
+          45deg,
+          $primary-color,
+          $secondary-color
+        );
+        animation: pulse 2s infinite;
+        box-shadow: 0 0 10px rgba($primary-color, 0.2);
+
+        &:nth-child(2) {
+          animation-delay: 0.2s;
+        }
+
+        &:nth-child(3) {
+          animation-delay: 0.4s;
+        }
       }
     }
 
     &__subtitle {
-      font-size: $font-size-lg;
+      font-size: $font-size-xl;
       color: $text-color;
-      margin-bottom: $spacing-xl;
-
-      @include breakpoint(md) {
-        font-size: $font-size-xl;
-      }
+      margin-bottom: $spacing-2xl;
+      line-height: 1.6;
+      font-weight: 400;
     }
 
     &__search {
       max-width: 600px;
-      margin: 0 auto $spacing-xl;
+      margin: 0 auto $spacing-2xl;
+      position: relative;
+
+      .search-bar {
+        position: relative;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: $border-radius-lg;
+        padding: $spacing-md $spacing-xl;
+        transition: all 0.3s ease;
+
+        &:focus-within {
+          background: rgba(255, 255, 255, 0.15);
+          border-color: $primary-color;
+          box-shadow: 0 0 20px rgba($primary-color, 0.1);
+        }
+
+        input {
+          color: $heading-color;
+          background: transparent;
+          border: none;
+          outline: none;
+          width: 100%;
+          font-size: $font-size-lg;
+        }
+      }
     }
 
     &__actions {
       display: flex;
       flex-direction: column;
-      gap: $spacing-sm;
+      gap: $spacing-lg;
       justify-content: center;
       align-items: center;
 
       @include breakpoint(sm) {
         flex-direction: row;
-        gap: $spacing-md;
+        gap: $spacing-xl;
       }
 
       .btn {
-        min-width: 150px;
+        min-width: 200px;
+        height: 56px;
+        font-size: $font-size-lg;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+
+        &-primary {
+          background: linear-gradient(
+            135deg,
+            $primary-color,
+            $secondary-color
+          );
+          border: none;
+          color: white;
+          padding: 0 $spacing-xl;
+
+          .btn-text {
+            position: relative;
+            z-index: 2;
+          }
+
+          .btn-icon {
+            position: absolute;
+            right: $spacing-sm;
+            transition: transform 0.3s ease;
+          }
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba($primary-color, 0.3);
+
+            .btn-icon {
+              transform: translateX(5px);
+            }
+          }
+        }
+
+        &-outline {
+          border: 2px solid $primary-color;
+          color: $primary-color;
+          background: transparent;
+          padding: 0 $spacing-xl;
+
+          .btn-text {
+            position: relative;
+            z-index: 2;
+          }
+
+          .btn-icon {
+            position: absolute;
+            right: $spacing-sm;
+            transition: transform 0.3s ease;
+          }
+
+          &:hover {
+            background: rgba($primary-color, 0.1);
+            transform: translateY(-2px);
+
+            .btn-icon {
+              transform: translateX(5px);
+            }
+          }
+        }
+      }
+    }
+
+    &__visual {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      width: 50%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+
+      @include breakpoint(md) {
+        display: none;
+      }
+
+      .ai-waves {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+
+        .wave {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(
+            45deg,
+            transparent 0%,
+            rgba($primary-color, 0.1) 50%,
+            transparent 100%
+          );
+          animation: wave 8s infinite;
+          opacity: 0.3;
+
+          &:nth-child(2) {
+            animation-delay: 2s;
+          }
+
+          &:nth-child(3) {
+            animation-delay: 4s;
+          }
+        }
       }
     }
   }
@@ -445,6 +591,34 @@ useHead({
 
     @include breakpoint(md) {
       font-size: $font-size-3xl;
+    }
+  }
+
+  // Animations
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.5;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes wave {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0);
     }
   }
 
