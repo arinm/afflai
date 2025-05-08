@@ -1,0 +1,37 @@
+{
+  "category": "image-generation",
+  "tools": [
+    {
+      "id": "midjourney",
+      "title": "Midjourney",
+      "description": "AI image generator creating stunning, high-quality visuals from text descriptions.",
+      "link": "https://www.midjourney.com/",
+      "pricing": "Basic plan at $10/month, Standard at $30/month",
+      "tags": ["image generation", "artistic", "design"]
+    },
+    {
+      "id": "dall-e",
+      "title": "DALL-E",
+      "description": "OpenAI's image generation model that creates detailed images from text prompts.",
+      "link": "https://openai.com/dall-e/",
+      "pricing": "Pay-per-use starting at $0.02 per image",
+      "tags": ["image generation", "realistic", "creative"]
+    },
+    {
+      "id": "stable-diffusion",
+      "title": "Stable Diffusion",
+      "description": "Open-source image generation model that can run locally or through various web interfaces.",
+      "link": "https://stability.ai/",
+      "pricing": "Free (open source), Premium services vary",
+      "tags": ["image generation", "open source", "customizable"]
+    },
+    {
+      "id": "canva",
+      "title": "Canva AI",
+      "description": "AI-powered design tools integrated into Canva's popular design platform.",
+      "link": "https://www.canva.com/",
+      "pricing": "Free tier available, Pro at $12.99/month",
+      "tags": ["design", "templates", "marketing"]
+    }
+  ]
+}

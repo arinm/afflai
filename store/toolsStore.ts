@@ -99,9 +99,24 @@ export const useToolsStore = defineStore('tools', () => {
     error.value = null;
     
     try {
-      const response = await fetch('/data/json-master-file.json');
-      masterFile.value = await response.json();
-      categories.value = masterFile.value.categories;
+      console.log('Fetching master file...');
+      // Use $fetch from Nuxt instead of fetch for better error handling
+      const masterData = await $fetch('/data/json-master-file.json', {
+        onResponseError(context) {
+          console.error('Response error:', context.response.status, context.response.statusText);
+          throw new Error(`Failed to fetch master file: ${context.response.statusText}`);
+        },
+      });
+      
+      console.log('Master file data:', masterData);
+      masterFile.value = masterData;
+      
+      if (!masterData || !masterData.categories || !Array.isArray(masterData.categories)) {
+        throw new Error('Invalid master file format');
+      }
+      
+      categories.value = masterData.categories;
+      console.log('Categories loaded:', categories.value);
     } catch (err) {
       console.error('Failed to fetch master file:', err);
       error.value = 'Failed to load categories. Please try again later.';
@@ -128,10 +143,22 @@ export const useToolsStore = defineStore('tools', () => {
         throw new Error('Master file could not be loaded');
       }
       
+      console.log(`Fetching category: ${category}`);
       const fileName = masterFile.value.categoryFiles[category];
-      const response = await fetch(`/data/${fileName}.json`);
-      const data = await response.json();
       
+      if (!fileName) {
+        throw new Error(`Category file name not found for ${category}`);
+      }
+      
+      console.log(`Category file name: ${fileName}`);
+      const data = await $fetch(`/data/${fileName}.json`, {
+        onResponseError(context) {
+          console.error('Response error:', context.response.status, context.response.statusText);
+          throw new Error(`Failed to fetch category ${category}: ${context.response.statusText}`);
+        },
+      });
+      
+      console.log(`Category data loaded for ${category}:`, data);
       categoryData.value[category] = data;
       currentCategory.value = category;
     } catch (err) {
@@ -179,6 +206,94 @@ export const useToolsStore = defineStore('tools', () => {
       }
     }
     return null;
+  }
+  
+  // Fetch all categories from the master file
+  async function fetchAllCategories(): Promise<Category[]> {
+    console.log('Fetching all categories...');
+    if (!masterFile.value) {
+      console.log('Master file not loaded, fetching it first...');
+      await fetchMasterFile();
+    }
+    
+    if (!masterFile.value) {
+      console.error('Master file still not loaded after fetchMasterFile');
+      throw new Error('Master file could not be loaded');
+    }
+    
+    const categoryList: Category[] = [];
+    
+    // Ensure categories.value is an array before iterating
+    if (!categories.value || !Array.isArray(categories.value)) {
+      console.error('Categories is not an array:', categories.value);
+      return categoryList;
+    }
+    
+    console.log('Processing categories:', categories.value);
+    for (const categorySlug of categories.value) {
+      console.log(`Processing category: ${categorySlug}`);
+      if (!categoryData.value[categorySlug]) {
+        try {
+          const fileName = masterFile.value.categoryFiles[categorySlug];
+          if (!fileName) {
+            console.error(`Category file name not found for ${categorySlug}`);
+            continue;
+          }
+          
+          console.log(`Fetching category data for ${categorySlug} from /data/${fileName}.json`);
+          const data = await $fetch(`/data/${fileName}.json`, {
+            onResponseError(context) {
+              console.error(`Response error for ${categorySlug}:`, context.response.status, context.response.statusText);
+              throw new Error(`Failed to fetch category ${categorySlug}: ${context.response.statusText}`);
+            },
+          });
+          
+          console.log(`Category data loaded for ${categorySlug}:`, data);
+          categoryData.value[categorySlug] = data;
+          categoryList.push({
+            ...data,
+            slug: categorySlug
+          });
+        } catch (err) {
+          console.error(`Failed to fetch category ${categorySlug}:`, err);
+        }
+      } else {
+        console.log(`Using cached data for category ${categorySlug}`);
+        categoryList.push({
+          ...categoryData.value[categorySlug],
+          slug: categorySlug
+        });
+      }
+    }
+    
+    console.log('All categories loaded:', categoryList.length);
+    return categoryList;
+  }
+  
+  // Get tools by category
+  function getToolsByCategory(category: string): Tool[] | null {
+    if (!categoryData.value[category]) {
+      return null;
+    }
+    
+    return categoryData.value[category].tools;
+  }
+  
+  // Get all tools from all categories
+  function getAllTools(): Tool[] {
+    const allToolsList: Tool[] = [];
+    const toolIds = new Set<string>();
+    
+    Object.values(categoryData.value).forEach(category => {
+      category.tools.forEach(tool => {
+        if (!toolIds.has(tool.id)) {
+          toolIds.add(tool.id);
+          allToolsList.push(tool);
+        }
+      });
+    });
+    
+    return allToolsList;
   }
   
   // Search across all categories
@@ -248,6 +363,9 @@ export const useToolsStore = defineStore('tools', () => {
     // Actions
     fetchMasterFile,
     fetchCategory,
+    fetchAllCategories,
+    getToolsByCategory,
+    getAllTools,
     setSearchTerm,
     toggleTag,
     togglePriceRange,

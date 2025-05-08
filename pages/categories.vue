@@ -1,109 +1,160 @@
 <template>
   <div class="categories-page">
     <div class="container">
-      <h1 class="categories-page__title">All AI Categories</h1>
-
-      <div class="categories-page__filters">
-        <SearchBar
-          v-model="searchQuery"
-          placeholder="Search categories..."
-          @search="handleSearch"
-        />
-      </div>
-
-      <div class="categories-page__grid">
-        <NuxtLink
-          v-for="category in filteredCategories"
-          :key="category.id"
-          :to="`/categories/${category.slug}`"
-          class="category-card"
-        >
-          <div class="category-card__icon">
-            <component :is="category.icon" />
+      <div class="categories-content">
+        <div v-if="isLoading">
+          <LoadingSpinner message="Loading categories..." />
+        </div>
+        <div v-else-if="error">
+          <ErrorMessage :message="error" @retry="loadAllCategories" />
+        </div>
+        <div v-else>
+          <div class="compact-hero">
+            <div class="compact-hero__background">
+              <div class="compact-hero__gradient"></div>
+              <div class="compact-hero__particles">
+                <div v-for="n in 10" :key="n" class="particle" :class="`particle-${n % 5}`"></div>
+              </div>
+            </div>
+            <div class="compact-hero__content">
+              <h1 class="compact-hero__title">AI Tool Categories</h1>
+              <p class="compact-hero__subtitle">Browse our collection of cutting-edge AI tools by category or explore all tools at once</p>
+            </div>
           </div>
-          <h2 class="category-card__title">{{ category.name }}</h2>
-          <p class="category-card__description">{{ category.description }}</p>
-          <span class="category-card__count">{{ category.toolCount || 0 }} tools</span>
-        </NuxtLink>
-      </div>
-
-      <div v-if="isLoading" class="categories-page__loading">
-        <LoadingSpinner />
-      </div>
-
-      <div v-if="error" class="categories-page__error">
-        <ErrorMessage :message="error" @retry="loadCategories" />
+          <CategoryFilter
+            :categories="availableCategories"
+            :selected-category="selectedCategory"
+            @select="handleCategorySelect"
+          />
+          <div v-if="filteredTools?.length === 0" class="empty-container">
+            <p class="empty-message">No tools found in this category.</p>
+          </div>
+          <div v-else>
+            <div class="tools-count">
+              <p>Showing {{ filteredTools?.length }} tools</p>
+            </div>
+            <ToolGrid
+              :tools="filteredTools"
+              :category="selectedCategory"
+              :is-loading="false"
+              :error="null"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Category } from '~/types/categories'
+import type { Tool } from '~/types';
+import { useToolsStore } from '~/store/toolsStore';
+import LoadingSpinner from '~/components/Ui/LoadingSpinner.vue';
+import ErrorMessage from '~/components/Ui/ErrorMessage.vue';
+import HeroSection from '~/components/Home/HeroSection.vue';
+import ToolGrid from '~/components/Tool/ToolGrid.vue';
+import CategoryFilter from '~/components/Category/Filter.vue';
 
-// SSR page for better SEO
+// Define middleware
 definePageMeta({
-  layout: "default",
-  middleware: ["fetch-categories"],
-})
+  middleware: ['fetch-categories']
+});
 
-// State
-const searchQuery = ref("")
-const isLoading = ref(false)
-const error = ref<string | null>(null)
+// Use the store directly
+const toolsStore = useToolsStore();
 
-// Fetch categories from API
-const { data: categories } = await useAsyncData<Category[]>(
-  "allCategories",
-  async () => {
-    isLoading.value = true
-    error.value = null
-    try {
-      const response = await $fetch('/api/categories')
-      return response.featuredCategories
-    } catch (err) {
-      error.value = "Failed to load categories. Please try again."
-      throw err
-    } finally {
-      isLoading.value = false
-    }
-  }
-)
+// Reactive state
+const isLoading = ref(true);
+const error = ref<string | null>(null);
+const selectedCategory = ref('all');
+const allTools = ref<Tool[]>([]);
+const availableCategories = ref<string[]>([]);
 
 // Computed
-const filteredCategories = computed(() => {
-  if (!searchQuery.value) return categories.value || []
+const filteredTools = computed(() => {
+  if (selectedCategory.value === 'all') {
+    return allTools.value;
+  }
   
-  const search = searchQuery.value.toLowerCase()
-  return (categories.value || []).filter(category => 
-    category.name.toLowerCase().includes(search) ||
-    category.description.toLowerCase().includes(search)
-  )
-})
+  return allTools.value.filter(tool => {
+    // Check if the tool has a categories property and it's an array
+    if (!tool.categories || !Array.isArray(tool.categories)) {
+      // If no categories property, add it with the current category
+      if (tool.categoryId) {
+        // If the tool has a categoryId, use that
+        return tool.categoryId === selectedCategory.value;
+      }
+      return false;
+    }
+    
+    // If it has categories, check if it includes the selected category
+    return tool.categories.includes(selectedCategory.value);
+  });
+});
 
 // Methods
-const handleSearch = () => {
-  if (searchQuery.value.trim()) {
-    // Search is handled by the computed property
+const loadAllCategories = async () => {
+  isLoading.value = true;
+  error.value = null;
+  
+  try {
+    // Get all available categories
+    const categories = await toolsStore.fetchAllCategories();
+    availableCategories.value = categories.map(cat => cat.slug);
+    
+    // Load tools from all categories
+    const toolsPromises = availableCategories.value.map(category => 
+      toolsStore.fetchCategory(category)
+    );
+    
+    await Promise.all(toolsPromises);
+    
+    // Combine all tools and remove duplicates
+    const toolsMap = new Map();
+    
+    for (const category of availableCategories.value) {
+      const categoryTools = toolsStore.getToolsByCategory(category) || [];
+      
+      for (const tool of categoryTools) {
+        if (!toolsMap.has(tool.id)) {
+          // Ensure the tool has a categories array
+          if (!tool.categories || !Array.isArray(tool.categories)) {
+            tool.categories = [category];
+          } else if (!tool.categories.includes(category)) {
+            // Add the current category if it's not already included
+            tool.categories.push(category);
+          }
+          
+          toolsMap.set(tool.id, tool);
+        } else {
+          // Update existing tool's categories if needed
+          const existingTool = toolsMap.get(tool.id);
+          if (!existingTool.categories) {
+            existingTool.categories = [category];
+          } else if (!existingTool.categories.includes(category)) {
+            existingTool.categories.push(category);
+          }
+        }
+      }
+    }
+    
+    allTools.value = Array.from(toolsMap.values());
+  } catch (err) {
+    console.error("Error loading categories:", err);
+    error.value = "Failed to load categories. Please try again.";
+  } finally {
+    isLoading.value = false;
   }
-}
+};
 
-const loadCategories = () => {
-  // Trigger a reload of the categories
-  error.value = null
-  isLoading.value = true
-  return $fetch('/api/categories')
-    .then(response => {
-      categories.value = response.featuredCategories
-    })
-    .catch(err => {
-      error.value = "Failed to load categories. Please try again."
-      throw err
-    })
-    .finally(() => {
-      isLoading.value = false
-    })
-}
+const handleCategorySelect = (category: string) => {
+  selectedCategory.value = category;
+};
+
+// Lifecycle
+onMounted(() => {
+  loadAllCategories();
+});
 
 // SEO
 useHead({
@@ -127,96 +178,176 @@ useHead({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .categories-page {
-  padding: $spacing-3xl 0;
-
-  &__title {
-    font-size: $font-size-3xl;
-    color: $heading-color;
-    margin-bottom: $spacing-2xl;
-    text-align: center;
-  }
-
-  &__filters {
-    margin-bottom: $spacing-2xl;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  &__grid {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: $spacing-md;
-
-    @include breakpoint(sm) {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    @include breakpoint(md) {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    @include breakpoint(lg) {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-
-  &__loading {
-    text-align: center;
-    padding: $spacing-3xl 0;
-  }
-
-  &__error {
-    text-align: center;
-    padding: $spacing-3xl 0;
-  }
+  padding: 2rem 0;
 }
 
-.category-card {
-  background: white;
-  border-radius: $border-radius;
-  padding: $spacing-md;
-  text-decoration: none;
-  color: $text-color;
-  transition: all 0.3s ease;
-  box-shadow: $card-shadow;
+.categories-hero {
+  margin-bottom: 2rem;
+}
+
+.categories-content {
+  margin-top: 2rem;
+}
+
+.loading-container,
+.error-container,
+.empty-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  padding: 2rem;
   text-align: center;
+}
 
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: $card-shadow-hover;
-    color: $text-color;
+.empty-message {
+  color: #666;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+.tools-count {
+  margin-bottom: 1rem;
+  color: #666;
+  font-size: $font-size-sm;
+}
+
+/* Compact Hero Styles */
+.compact-hero {
+  position: relative;
+  height: 300px;
+  max-height: 300px;
+  overflow: hidden;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, #1a73e8, #4285f4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  
+  &__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
   }
-
-  &__icon {
-    width: 48px;
-    height: 48px;
-    margin-bottom: $spacing-sm;
-    color: $primary-color;
+  
+  &__gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(26, 115, 232, 0.8), rgba(66, 133, 244, 0.8));
   }
-
+  
+  &__particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  &__content {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+    max-width: 800px;
+  }
+  
   &__title {
-    font-size: $font-size-lg;
-    font-weight: $font-weight-semibold;
-    margin-bottom: $spacing-sm;
-    color: $heading-color;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
-
-  &__description {
-    font-size: $font-size-sm;
-    color: $text-color-secondary;
-    margin-bottom: $spacing-sm;
+  
+  &__subtitle {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 1.5rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
+}
 
-  &__count {
-    font-size: $font-size-sm;
-    color: $primary-color;
-    font-weight: $font-weight-medium;
+/* Particle animations */
+.particle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.3);
+  animation: float 15s infinite ease-in-out;
+  
+  &-0 {
+    top: 10%;
+    left: 10%;
+    width: 15px;
+    height: 15px;
+    animation-delay: 0s;
+  }
+  
+  &-1 {
+    top: 20%;
+    left: 80%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 2s;
+  }
+  
+  &-2 {
+    top: 70%;
+    left: 30%;
+    width: 12px;
+    height: 12px;
+    animation-delay: 4s;
+  }
+  
+  &-3 {
+    top: 40%;
+    left: 60%;
+    width: 18px;
+    height: 18px;
+    animation-delay: 6s;
+  }
+  
+  &-4 {
+    top: 80%;
+    left: 80%;
+    width: 8px;
+    height: 8px;
+    animation-delay: 8s;
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateY(-20px) translateX(10px);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(0) translateX(20px);
+    opacity: 0.3;
+  }
+  75% {
+    transform: translateY(20px) translateX(10px);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.3;
   }
 }
 </style>

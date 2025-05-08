@@ -1,0 +1,24 @@
+{
+  "categories": [
+    "text-generation",
+    "image-generation",
+    "audio-voice",
+    "video-generation",
+    "productivity",
+    "coding"
+  ],
+  "categoryFiles": {
+    "text-generation": "text-generation",
+    "image-generation": "image-generation",
+    "audio-voice": "audio-voice",
+    "video-generation": "video-generation",
+    "productivity": "productivity",
+    "coding": "coding"
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "lastUpdated": "2025-05-08",
+    "totalTools": 24,
+    "description": "AI Tools Directory - Master File"
+  }
+}

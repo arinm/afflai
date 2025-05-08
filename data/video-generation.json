@@ -1,0 +1,37 @@
+{
+  "category": "video-generation",
+  "tools": [
+    {
+      "id": "runway",
+      "title": "Runway",
+      "description": "AI-powered creative suite for video editing, generation, and visual effects.",
+      "link": "https://runwayml.com/",
+      "pricing": "Free tier available, Pro at $15/month, Unlimited at $35/month",
+      "tags": ["video editing", "visual effects", "creative tools"]
+    },
+    {
+      "id": "synthesia",
+      "title": "Synthesia",
+      "description": "AI video generation platform that creates professional videos with virtual presenters.",
+      "link": "https://www.synthesia.io/",
+      "pricing": "Personal at $30/month, Business at $90/month",
+      "tags": ["avatar videos", "corporate", "training"]
+    },
+    {
+      "id": "descript-video",
+      "title": "Descript Video",
+      "description": "All-in-one video editing platform with AI-powered tools for seamless editing.",
+      "link": "https://www.descript.com/",
+      "pricing": "Free tier available, Creator at $15/month, Pro at $30/month",
+      "tags": ["video editing", "transcription", "screen recording"]
+    },
+    {
+      "id": "invideo",
+      "title": "InVideo",
+      "description": "Online video creation platform with AI-powered templates and editing tools.",
+      "link": "https://invideo.io/",
+      "pricing": "Free tier available, Business at $30/month",
+      "tags": ["marketing videos", "templates", "social media"]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "category": "text-generation",
+  "tools": [
+    {
+      "id": "chatgpt",
+      "title": "ChatGPT",
+      "description": "Powerful AI assistant for text generation, answering questions, and creative writing.",
+      "link": "https://chat.openai.com/",
+      "pricing": "Free tier available, ChatGPT Plus at $20/month",
+      "tags": ["conversational AI", "content generation", "writing assistant"]
+    },
+    {
+      "id": "claude",
+      "title": "Claude",
+      "description": "Advanced AI assistant with strong reasoning capabilities and nuanced conversations.",
+      "link": "https://claude.ai/",
+      "pricing": "Free tier available, Claude Pro at $20/month",
+      "tags": ["conversational AI", "document analysis", "reasoning"]
+    },
+    {
+      "id": "jasper",
+      "title": "Jasper",
+      "description": "AI content platform designed specifically for marketing teams and content creators.",
+      "link": "https://www.jasper.ai/",
+      "pricing": "Creator plan at $39/month, Teams plan at $99/month",
+      "tags": ["marketing copy", "content creation", "SEO writing"]
+    },
+    {
+      "id": "copy-ai",
+      "title": "Copy.ai",
+      "description": "AI copywriting tool that generates high-quality content for various marketing needs.",
+      "link": "https://www.copy.ai/",
+      "pricing": "Free tier available, Pro plan at $36/month",
+      "tags": ["copywriting", "marketing", "social media"]
+    }
+  ]
+}

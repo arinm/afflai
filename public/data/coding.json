@@ -1,0 +1,37 @@
+{
+  "category": "coding",
+  "tools": [
+    {
+      "id": "github-copilot",
+      "title": "GitHub Copilot",
+      "description": "AI pair programmer that suggests code completions based on context.",
+      "link": "https://github.com/features/copilot",
+      "pricing": "Individual plan at $10/month, Business plan at $19/user/month",
+      "tags": ["code generation", "pair programming", "developer tool"]
+    },
+    {
+      "id": "codeium",
+      "title": "Codeium",
+      "description": "Free AI-powered code completion tool with support for multiple languages and IDEs.",
+      "link": "https://codeium.com/",
+      "pricing": "Free for individuals, Teams at $12/user/month",
+      "tags": ["code completion", "IDE integration", "developer tool"]
+    },
+    {
+      "id": "tabnine",
+      "title": "Tabnine",
+      "description": "AI code assistant that provides accurate and context-relevant code completions.",
+      "link": "https://www.tabnine.com/",
+      "pricing": "Free tier available, Pro at $12/month",
+      "tags": ["code completion", "IDE integration", "developer tool"]
+    },
+    {
+      "id": "replit-ghostwriter",
+      "title": "Replit Ghostwriter",
+      "description": "AI coding assistant integrated into Replit's online coding platform.",
+      "link": "https://replit.com/",
+      "pricing": "Free tier available, Pro at $10/month",
+      "tags": ["code generation", "online IDE", "education"]
+    }
+  ]
+}

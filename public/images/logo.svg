@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Simple minimal logo like Windsurf.com -->
+  <path d="M40 40H80V80H40V40Z" stroke="#111" stroke-width="3" />
+  
+  <!-- A letter -->
+  <path d="M50 70V50L60 70L70 50V70" stroke="#111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+  
+  <!-- Dot for the i -->
+  <circle cx="80" cy="40" r="3" fill="#111" />
+</svg>

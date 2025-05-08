@@ -2798,14 +2798,18 @@ const _rfTToW = lazyEventHandler(() => {
 });
 
 const _lazy_zSLe2D = () => Promise.resolve().then(function () { return _category_$1; });
+const _lazy_xY8YY2 = () => Promise.resolve().then(function () { return index$3; });
 const _lazy_IQ5yTW = () => Promise.resolve().then(function () { return scrapeBlog$1; });
+const _lazy_Rq5gfY = () => Promise.resolve().then(function () { return index$1; });
 const _lazy_JHd1sP = () => Promise.resolve().then(function () { return robots_txt$1; });
 const _lazy_gibABn = () => Promise.resolve().then(function () { return sitemap_xml; });
 const _lazy_Dai29t = () => Promise.resolve().then(function () { return renderer$1; });
 
 const handlers = [
   { route: '/api/categories/:category', handler: _lazy_zSLe2D, lazy: true, middleware: false, method: undefined },
+  { route: '/api/categories', handler: _lazy_xY8YY2, lazy: true, middleware: false, method: undefined },
   { route: '/api/scrape-blog', handler: _lazy_IQ5yTW, lazy: true, middleware: false, method: undefined },
+  { route: '/api/tools', handler: _lazy_Rq5gfY, lazy: true, middleware: false, method: undefined },
   { route: '/robots.txt', handler: _lazy_JHd1sP, lazy: true, middleware: false, method: undefined },
   { route: '/sitemap.xml', handler: _lazy_gibABn, lazy: true, middleware: false, method: undefined },
   { route: '/__nuxt_error', handler: _lazy_Dai29t, lazy: true, middleware: false, method: undefined },
@@ -3162,6 +3166,46 @@ const _category_$1 = /*#__PURE__*/Object.freeze({
   default: _category_
 });
 
+const index$2 = defineEventHandler(async (event) => {
+  try {
+    const publicDir = path.resolve(process.cwd(), "public");
+    const masterFilePath = path.join(publicDir, "data", "json-master-file.json");
+    const masterFileContent = fs.readFileSync(masterFilePath, "utf-8");
+    const masterFile = JSON.parse(masterFileContent);
+    const categories = [];
+    for (const categorySlug of masterFile.categories) {
+      const fileName = masterFile.categoryFiles[categorySlug];
+      try {
+        const categoryFilePath = path.join(publicDir, "data", `${fileName}.json`);
+        const categoryFileContent = fs.readFileSync(categoryFilePath, "utf-8");
+        const categoryData = JSON.parse(categoryFileContent);
+        categories.push({
+          ...categoryData,
+          slug: categorySlug
+        });
+      } catch (err) {
+        console.error(`Failed to fetch category ${categorySlug}:`, err);
+      }
+    }
+    return {
+      categories,
+      success: true
+    };
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    return {
+      categories: [],
+      success: false,
+      error: "Failed to fetch categories"
+    };
+  }
+});
+
+const index$3 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: index$2
+});
+
 const scrapeBlog = defineEventHandler(async (event) => {
   try {
     const { url } = getQuery$1(event);
@@ -3207,6 +3251,56 @@ const scrapeBlog = defineEventHandler(async (event) => {
 const scrapeBlog$1 = /*#__PURE__*/Object.freeze({
   __proto__: null,
   default: scrapeBlog
+});
+
+const index = defineEventHandler(async (event) => {
+  try {
+    const publicDir = path.resolve(process.cwd(), "public");
+    const masterFilePath = path.join(publicDir, "data", "json-master-file.json");
+    const masterFileContent = fs.readFileSync(masterFilePath, "utf-8");
+    const masterFile = JSON.parse(masterFileContent);
+    const allTools = [];
+    const toolIds = /* @__PURE__ */ new Set();
+    for (const categorySlug of masterFile.categories) {
+      const fileName = masterFile.categoryFiles[categorySlug];
+      try {
+        const categoryFilePath = path.join(publicDir, "data", `${fileName}.json`);
+        const categoryFileContent = fs.readFileSync(categoryFilePath, "utf-8");
+        const categoryData = JSON.parse(categoryFileContent);
+        for (const tool of categoryData.tools) {
+          if (!toolIds.has(tool.id)) {
+            toolIds.add(tool.id);
+            allTools.push({
+              ...tool,
+              categories: tool.categories || [categorySlug]
+            });
+          }
+        }
+      } catch (err) {
+        console.error(`Failed to fetch category ${categorySlug}:`, err);
+      }
+    }
+    const sortedTools = allTools.sort((a, b) => {
+      return (b.rating || 0) - (a.rating || 0);
+    });
+    const featuredTools = sortedTools.slice(0, 8);
+    return {
+      tools: featuredTools,
+      success: true
+    };
+  } catch (error) {
+    console.error("Error fetching tools:", error);
+    return {
+      tools: [],
+      success: false,
+      error: "Failed to fetch tools"
+    };
+  }
+});
+
+const index$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: index
 });
 
 const robots_txt = defineEventHandler((event) => {

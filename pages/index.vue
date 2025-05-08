@@ -1,48 +1,16 @@
 <template>
   <div class="home-page">
     <!-- Hero Section -->
-    <section class="hero">
-      <div class="container">
-        <div class="hero__content">
-          <div class="hero__title-wrapper">
-            <h1 class="hero__title">Discover the Best AI Tools for Any Task</h1>
-            <div class="hero__title-decoration">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-            </div>
-          </div>
-          <p class="hero__subtitle">
-            Explore our curated collection of AI tools and applications to
-            enhance your workflow and boost productivity.
-          </p>
-          <div class="hero__search">
-            <SearchBar
-              v-model="searchQuery"
-              placeholder="Search for AI tools..."
-              @search="handleSearch"
-            />
-          </div>
-          <div class="hero__actions">
-            <NuxtLink to="/categories" class="btn btn-primary">
-              <span class="btn-text">Explore Categories</span>
-              <span class="btn-icon">→</span>
-            </NuxtLink>
-            <NuxtLink to="/about" class="btn btn-outline">
-              <span class="btn-text">Learn More</span>
-              <span class="btn-icon">→</span>
-            </NuxtLink>
-          </div>
-        </div>
-        <div class="hero__visual">
-          <div class="ai-waves">
-            <div class="wave"></div>
-            <div class="wave"></div>
-            <div class="wave"></div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <HeroSection>
+      <template #search>
+        <SearchBar
+          v-model="searchQuery"
+          placeholder="Search for AI tools..."
+          @search="handleSearch"
+          class="hero__search-bar"
+        />
+      </template>
+    </HeroSection>
 
     <!-- Featured Categories Section -->
     <section class="categories">
@@ -77,7 +45,7 @@
         </div>
 
         <div class="featured-tools__grid">
-          <ToolCard
+          <Tool-Card
             v-for="tool in featuredTools"
             :key="tool.id"
             :tool="tool"
@@ -162,6 +130,7 @@
 
 <script setup lang="ts">
 import type { Category, CategoriesResponse, ToolsResponse } from '~/types/categories'
+import HeroSection from '~/components/Home/HeroSection.vue'
 
 // SSR page for better SEO
 definePageMeta({
@@ -314,273 +283,7 @@ useHead({
 
 <style lang="scss">
 .home-page {
-  // Hero section
-  .hero {
-    position: relative;
-    background: linear-gradient(
-      135deg,
-      rgba(13, 17, 23, 0.95),
-      rgba(13, 17, 23, 0.95)
-    );
-    padding: $spacing-3xl 0;
-    margin-bottom: $spacing-3xl;
-    overflow: hidden;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: url('/images/hero-bg.png');
-      background-size: cover;
-      background-position: center;
-      opacity: 0.1;
-      z-index: 0;
-    }
-
-    &__content {
-      max-width: 800px;
-      margin: 0 auto;
-      text-align: center;
-      position: relative;
-      z-index: 2;
-    }
-
-    &__title-wrapper {
-      position: relative;
-      margin-bottom: $spacing-xl;
-      text-align: center;
-    }
-
-    &__title {
-      font-size: $font-size-3xl;
-      color: $heading-color;
-      margin-bottom: $spacing-md;
-      font-weight: 800;
-      line-height: 1.2;
-      position: relative;
-      display: inline-block;
-
-      @include breakpoint(md) {
-        font-size: $font-size-3xl;
-      }
-
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: -10px;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(
-          90deg,
-          $primary-color,
-          $secondary-color
-        );
-        opacity: 0.5;
-      }
-    }
-
-    &__title-decoration {
-      display: flex;
-      justify-content: center;
-      gap: $spacing-sm;
-      margin-top: $spacing-md;
-      position: absolute;
-      bottom: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1;
-
-      .dot {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background: linear-gradient(
-          45deg,
-          $primary-color,
-          $secondary-color
-        );
-        animation: pulse 2s infinite;
-        box-shadow: 0 0 10px rgba($primary-color, 0.2);
-
-        &:nth-child(2) {
-          animation-delay: 0.2s;
-        }
-
-        &:nth-child(3) {
-          animation-delay: 0.4s;
-        }
-      }
-    }
-
-    &__subtitle {
-      font-size: $font-size-xl;
-      color: $text-color;
-      margin-bottom: $spacing-2xl;
-      line-height: 1.6;
-      font-weight: 400;
-    }
-
-    &__search {
-      max-width: 600px;
-      margin: 0 auto $spacing-2xl;
-      position: relative;
-
-      .search-bar {
-        position: relative;
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: $border-radius-lg;
-        padding: $spacing-md $spacing-xl;
-        transition: all 0.3s ease;
-
-        &:focus-within {
-          background: rgba(255, 255, 255, 0.15);
-          border-color: $primary-color;
-          box-shadow: 0 0 20px rgba($primary-color, 0.1);
-        }
-
-        input {
-          color: $heading-color;
-          background: transparent;
-          border: none;
-          outline: none;
-          width: 100%;
-          font-size: $font-size-lg;
-        }
-      }
-    }
-
-    &__actions {
-      display: flex;
-      flex-direction: column;
-      gap: $spacing-lg;
-      justify-content: center;
-      align-items: center;
-
-      @include breakpoint(sm) {
-        flex-direction: row;
-        gap: $spacing-xl;
-      }
-
-      .btn {
-        min-width: 200px;
-        height: 56px;
-        font-size: $font-size-lg;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-
-        &-primary {
-          background: linear-gradient(
-            135deg,
-            $primary-color,
-            $secondary-color
-          );
-          border: none;
-          color: white;
-          padding: 0 $spacing-xl;
-
-          .btn-text {
-            position: relative;
-            z-index: 2;
-          }
-
-          .btn-icon {
-            position: absolute;
-            right: $spacing-sm;
-            transition: transform 0.3s ease;
-          }
-
-          &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba($primary-color, 0.3);
-
-            .btn-icon {
-              transform: translateX(5px);
-            }
-          }
-        }
-
-        &-outline {
-          border: 2px solid $primary-color;
-          color: $primary-color;
-          background: transparent;
-          padding: 0 $spacing-xl;
-
-          .btn-text {
-            position: relative;
-            z-index: 2;
-          }
-
-          .btn-icon {
-            position: absolute;
-            right: $spacing-sm;
-            transition: transform 0.3s ease;
-          }
-
-          &:hover {
-            background: rgba($primary-color, 0.1);
-            transform: translateY(-2px);
-
-            .btn-icon {
-              transform: translateX(5px);
-            }
-          }
-        }
-      }
-    }
-
-    &__visual {
-      position: absolute;
-      top: 50%;
-      right: 0;
-      transform: translateY(-50%);
-      width: 50%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-
-      @include breakpoint(md) {
-        display: none;
-      }
-
-      .ai-waves {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
-
-        .wave {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(
-            45deg,
-            transparent 0%,
-            rgba($primary-color, 0.1) 50%,
-            transparent 100%
-          );
-          animation: wave 8s infinite;
-          opacity: 0.3;
-
-          &:nth-child(2) {
-            animation-delay: 2s;
-          }
-
-          &:nth-child(3) {
-            animation-delay: 4s;
-          }
-        }
-      }
-    }
-  }
+  // Hero section styles moved to HeroSection.vue component
 
   // Section styles
   .section-title {
@@ -594,33 +297,7 @@ useHead({
     }
   }
 
-  // Animations
-  @keyframes pulse {
-    0% {
-      transform: scale(1);
-      opacity: 1;
-    }
-    50% {
-      transform: scale(1.2);
-      opacity: 0.5;
-    }
-    100% {
-      transform: scale(1);
-      opacity: 1;
-    }
-  }
-
-  @keyframes wave {
-    0% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-20px);
-    }
-    100% {
-      transform: translateY(0);
-    }
-  }
+  // Animations moved to HeroSection.vue component
 
   .section-header {
     @include flex-between;

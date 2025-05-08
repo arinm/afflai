@@ -1,0 +1,37 @@
+{
+  "category": "audio-voice",
+  "tools": [
+    {
+      "id": "elevenlabs",
+      "title": "ElevenLabs",
+      "description": "Advanced voice AI platform for realistic text-to-speech and voice cloning.",
+      "link": "https://elevenlabs.io/",
+      "pricing": "Free tier available, Starter plan at $5/month",
+      "tags": ["voice synthesis", "text-to-speech", "voice cloning"]
+    },
+    {
+      "id": "murf",
+      "title": "Murf AI",
+      "description": "AI voice generator with studio-quality voices for various content creation needs.",
+      "link": "https://murf.ai/",
+      "pricing": "Free tier available, Pro at $29/month",
+      "tags": ["voice over", "text-to-speech", "podcast"]
+    },
+    {
+      "id": "descript",
+      "title": "Descript",
+      "description": "All-in-one audio and video editing platform with AI voice generation and transcription.",
+      "link": "https://www.descript.com/",
+      "pricing": "Free tier available, Creator at $15/month",
+      "tags": ["audio editing", "podcast", "transcription"]
+    },
+    {
+      "id": "play-ht",
+      "title": "Play.ht",
+      "description": "AI voice generator with over 900+ voices in 142 languages for various applications.",
+      "link": "https://play.ht/",
+      "pricing": "Personal plan at $14.99/month, Premium at $39.99/month",
+      "tags": ["text-to-speech", "multilingual", "voice over"]
+    }
+  ]
+}

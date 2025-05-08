@@ -6,8 +6,14 @@ declare module "nitropack/types" {
     '/api/categories/:category': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/categories/[category]').default>>>>
     }
+    '/api/categories': {
+      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/categories/index').default>>>>
+    }
     '/api/scrape-blog': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/scrape-blog').default>>>>
+    }
+    '/api/tools': {
+      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/tools/index').default>>>>
     }
     '/robots.txt': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/routes/robots.txt').default>>>> | Simplify<Serialize<Awaited<ReturnType<typeof import('../../node_modules/@nuxtjs/robots/dist/runtime/server/routes/robots-txt').default>>>>

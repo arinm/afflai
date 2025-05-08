@@ -28,6 +28,10 @@
 </template>
 
 <script setup>
+definePageMeta({
+  layout: "default",
+});
+
 const blogPosts = [
   {
     id: 1,
@@ -57,87 +61,132 @@ const blogPosts = [
     image: '/images/placeholder-blog-3.jpg'
   }
 ]
+
+// SEO
+useHead({
+  title: "AI Tools Blog - Latest News and Insights",
+  meta: [
+    {
+      name: "description",
+      content: "Stay updated with the latest news, guides, and insights about AI tools and technology.",
+    },
+    {
+      property: "og:title",
+      content: "AI Tools Blog - Latest News and Insights",
+    },
+    {
+      property: "og:description",
+      content: "Stay updated with the latest news, guides, and insights about AI tools and technology.",
+    },
+  ],
+});
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .blog-page {
-  padding: 2rem 0;
+  padding: $spacing-2xl 0;
 }
 
 .page-title {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+  font-size: $font-size-3xl;
+  margin-bottom: $spacing-sm;
   text-align: center;
+  color: $heading-color;
 }
 
 .page-subtitle {
   text-align: center;
-  color: #666;
-  margin-bottom: 3rem;
+  color: $text-color-secondary;
+  margin-bottom: $spacing-3xl;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .blog-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
+  grid-template-columns: repeat(1, 1fr);
+  gap: $spacing-xl;
+  margin-top: $spacing-xl;
+  
+  @include breakpoint(sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @include breakpoint(lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .blog-card {
-  border: 1px solid #eaeaea;
-  border-radius: 8px;
+  background-color: white;
+  border-radius: $border-radius;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.blog-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.blog-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.blog-card__content {
-  padding: 1.5rem;
-}
-
-.blog-card__meta {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
-  font-size: 0.875rem;
-  color: #666;
-}
-
-.blog-card__title {
-  font-size: 1.25rem;
-  margin-bottom: 0.75rem;
-}
-
-.blog-card__excerpt {
-  color: #666;
-  margin-bottom: 1rem;
-  line-height: 1.6;
+  box-shadow: $card-shadow;
+  transition: transform $transition-normal, box-shadow $transition-normal;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: $card-shadow-hover;
+  }
+  
+  &__image {
+    height: 200px;
+    overflow: hidden;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    &:hover img {
+      transform: scale(1.05);
+    }
+  }
+  
+  &__content {
+    padding: $spacing-md;
+  }
+  
+  &__meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: $spacing-xs;
+    font-size: $font-size-xs;
+    color: $text-color-secondary;
+  }
+  
+  &__title {
+    font-size: $font-size-lg;
+    margin-bottom: $spacing-sm;
+    color: $heading-color;
+  }
+  
+  &__excerpt {
+    color: $text-color-secondary;
+    margin-bottom: $spacing-md;
+    line-height: 1.6;
+    font-size: $font-size-sm;
+  }
 }
 
 .read-more {
   display: inline-flex;
   align-items: center;
-  color: #3b82f6;
-  font-weight: 500;
+  color: $primary-color;
+  font-weight: $font-weight-medium;
   text-decoration: none;
-}
-
-.read-more .icon {
-  margin-left: 0.5rem;
-  transition: transform 0.2s ease;
-}
-
-.read-more:hover .icon {
-  transform: translateX(3px);
+  font-size: $font-size-sm;
+  
+  .icon {
+    margin-left: $spacing-xs;
+    transition: transform 0.2s ease;
+  }
+  
+  &:hover .icon {
+    transform: translateX(3px);
+  }
 }
 </style>

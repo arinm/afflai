@@ -1,0 +1,25 @@
+{
+  "featuredCategories": [
+    {
+      "id": "text-generation",
+      "name": "Text Generation",
+      "slug": "text-generation",
+      "icon": "IconText",
+      "description": "AI tools for content creation, writing assistance, and text generation."
+    },
+    {
+      "id": "image-generation",
+      "name": "Image Generation",
+      "slug": "image-generation",
+      "icon": "IconImage",
+      "description": "Create stunning visuals and artwork using AI-powered image generators."
+    },
+    {
+      "id": "audio-voice",
+      "name": "Audio & Voice",
+      "slug": "audio-voice",
+      "icon": "IconAudio",
+      "description": "Generate and manipulate audio content with AI-powered tools."
+    }
+  ]
+}

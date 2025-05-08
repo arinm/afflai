@@ -1,5 +1,5 @@
 import { defineEventHandler } from 'h3'
-import type { CategoriesResponse } from '~/types/category'
+import type { CategoriesResponse } from '~/types/categories'
 
 export default defineEventHandler(async (event): Promise<CategoriesResponse> => {
   try {
@@ -10,7 +10,7 @@ export default defineEventHandler(async (event): Promise<CategoriesResponse> => 
           id: 'text-generation',
           name: 'Text Generation',
           slug: 'text-generation',
-          icon: 'IconText',
+          icon: 'Icon-Text',
           description: 'AI tools for content creation, writing assistance, and text generation.',
           toolCount: 42,
         },
@@ -18,7 +18,7 @@ export default defineEventHandler(async (event): Promise<CategoriesResponse> => 
           id: 'image-generation',
           name: 'Image Generation',
           slug: 'image-generation',
-          icon: 'IconImage',
+          icon: 'Icon-Image',
           description: 'Create stunning visuals and artwork using AI-powered image generators.',
           toolCount: 35,
         },
@@ -26,7 +26,7 @@ export default defineEventHandler(async (event): Promise<CategoriesResponse> => 
           id: 'audio-voice',
           name: 'Audio & Voice',
           slug: 'audio-voice',
-          icon: 'IconAudio',
+          icon: 'Icon-Audio',
           description: 'Generate and manipulate audio content with AI-powered tools.',
           toolCount: 28,
         },
@@ -34,7 +34,7 @@ export default defineEventHandler(async (event): Promise<CategoriesResponse> => 
           id: 'video-generation',
           name: 'Video Generation',
           slug: 'video-generation',
-          icon: 'IconVideo',
+          icon: 'Icon-Video',
           description: 'Create videos and animations using AI-powered video generation tools.',
           toolCount: 19,
         },
@@ -42,7 +42,7 @@ export default defineEventHandler(async (event): Promise<CategoriesResponse> => 
           id: 'productivity',
           name: 'Productivity',
           slug: 'productivity-organization',
-          icon: 'IconProductivity',
+          icon: 'Icon-Productivity',
           description: 'Boost your workflow with AI assistants and automation tools.',
           toolCount: 31,
         },
@@ -50,7 +50,7 @@ export default defineEventHandler(async (event): Promise<CategoriesResponse> => 
           id: 'coding',
           name: 'Coding & Development',
           slug: 'code-development',
-          icon: 'IconCode',
+          icon: 'Icon-Code',
           description: 'AI-powered coding assistants, bug fixers, and development tools.',
           toolCount: 27,
         },
@@ -66,5 +66,4 @@ export default defineEventHandler(async (event): Promise<CategoriesResponse> => 
       statusMessage: 'Failed to fetch categories',
     })
   }
-})
 })

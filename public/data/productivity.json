@@ -1,0 +1,37 @@
+{
+  "category": "productivity",
+  "tools": [
+    {
+      "id": "notion-ai",
+      "title": "Notion AI",
+      "description": "AI writing assistant integrated into Notion's workspace platform for enhanced productivity.",
+      "link": "https://www.notion.so/product/ai",
+      "pricing": "Notion Plus with AI at $10/month, Business at $18/month",
+      "tags": ["note-taking", "workspace", "writing assistant"]
+    },
+    {
+      "id": "otter-ai",
+      "title": "Otter.ai",
+      "description": "AI-powered meeting assistant that records, transcribes, and summarizes conversations.",
+      "link": "https://otter.ai/",
+      "pricing": "Free tier available, Pro at $16.99/month",
+      "tags": ["transcription", "meeting notes", "summarization"]
+    },
+    {
+      "id": "zapier",
+      "title": "Zapier AI",
+      "description": "AI-powered automation platform that connects apps and automates workflows.",
+      "link": "https://zapier.com/ai",
+      "pricing": "Free tier available, Starter at $19.99/month",
+      "tags": ["automation", "workflow", "integration"]
+    },
+    {
+      "id": "mem",
+      "title": "Mem",
+      "description": "AI-powered workspace that organizes your notes, tasks, and knowledge automatically.",
+      "link": "https://mem.ai/",
+      "pricing": "Free tier available, Pro at $10/month",
+      "tags": ["note-taking", "knowledge management", "organization"]
+    }
+  ]
+}

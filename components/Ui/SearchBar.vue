@@ -14,7 +14,7 @@
         @click="emitSearch"
         aria-label="Search"
       >
-        <IconSearch class="search-bar__icon" />
+        <Icon-Search class="search-bar__icon" />
       </button>
     </div>
   </div>

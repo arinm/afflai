@@ -1,6 +1,7 @@
 <template>
   <div class="category-page">
     <div class="container">
+      222ß
       <BreadcrumbNav :items="breadcrumbs" />
 
       <h1 class="category-page__title">{{ categoryName }} AI Tools</h1>
@@ -19,7 +20,7 @@
         />
       </div>
 
-      <ToolGrid
+      <Tool-Grid
         :tools="filteredTools"
         :category="categoryName"
         :is-loading="isLoading"
@@ -76,9 +77,9 @@ const loadCategory = async () => {
   error.value = null;
 
   try {
-    // Convert category name to match the format in JSON
-    const formattedCategory = categoryName.value;
-    await fetchCategory(formattedCategory);
+    // Use the category slug from the route parameters
+    const categorySlugValue = categorySlug.value;
+    await fetchCategory(categorySlugValue);
   } catch (err) {
     console.error("Error loading category:", err);
     error.value = "Failed to load tools. Please try again.";
