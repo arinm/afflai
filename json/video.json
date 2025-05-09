@@ -1,0 +1,101 @@
+{
+  "category": "Video Generation & Editing",
+  "tools": [
+    {
+      "id": "runway-gen2",
+      "title": "Runway Gen-2",
+      "link": "https://runwayml.com/",
+      "description": "Advanced text-to-video AI that can generate original video content from text prompts. Creates realistic, high-quality video with motion control and scene consistency.",
+      "pricing": "Free trial, Standard plan starting at $15/month",
+      "tags": ["text-to-video", "professional", "motion generation"]
+    },
+    {
+      "id": "synthesia",
+      "title": "Synthesia",
+      "link": "https://www.synthesia.io/",
+      "description": "AI video creation platform that turns text scripts into videos with realistic virtual presenters. Ideal for training, marketing, and educational content with over 140 AI avatars and 120+ languages.",
+      "pricing": "Starting at $30/month",
+      "tags": ["AI avatars", "corporate videos", "multilingual"]
+    },
+    {
+      "id": "d-id",
+      "title": "D-ID",
+      "link": "https://www.d-id.com/",
+      "description": "AI video generation platform that creates talking head videos from text. Features photorealistic digital humans with customizable appearances and voices.",
+      "pricing": "Starting at $5.99/month, custom enterprise plans",
+      "tags": ["talking heads", "digital humans", "presentations"]
+    },
+    {
+      "id": "heygen",
+      "title": "HeyGen",
+      "link": "https://www.heygen.com/",
+      "description": "AI video generator with customizable avatars that creates professional-looking videos from text. Offers voice cloning, multilingual support, and custom avatar creation.",
+      "pricing": "Free trial, Creator plan at $29/month",
+      "tags": ["AI presenters", "custom avatars", "voice cloning"]
+    },
+    {
+      "id": "lumen5",
+      "title": "Lumen5",
+      "link": "https://lumen5.com/",
+      "description": "Video creation platform that transforms text content into engaging videos using AI. Offers templates, stock media, and automated scene creation for marketing content.",
+      "pricing": "Free tier available, Basic plan at $19/month",
+      "tags": ["marketing videos", "templates", "automated"]
+    },
+    {
+      "id": "descript-video",
+      "title": "Descript",
+      "link": "https://www.descript.com/",
+      "description": "Video and audio editing platform that allows editing content by manipulating the transcript. Features screen recording, collaborative editing, and AI-powered tools.",
+      "pricing": "Free tier available, Creator plan at $12/month",
+      "tags": ["transcript editing", "collaboration", "screen recording"]
+    },
+    {
+      "id": "fliki",
+      "title": "Fliki",
+      "link": "https://fliki.ai/",
+      "description": "Text to video creation platform that generates videos with realistic voiceovers from blog posts, scripts, or other text content. Features 900+ voices in 75+ languages.",
+      "pricing": "Free tier available, Basic plan at $12/month",
+      "tags": ["blog to video", "voiceovers", "content repurposing"]
+    },
+    {
+      "id": "pictory",
+      "title": "Pictory",
+      "link": "https://pictory.ai/",
+      "description": "Video creation tool that automatically converts long-form text into short videos. Features automatic highlight selection, captioning, and voiceover generation.",
+      "pricing": "Standard plan at $19/month",
+      "tags": ["content repurposing", "short-form video", "automated"]
+    },
+    {
+      "id": "elai",
+      "title": "Elai",
+      "link": "https://elai.io/",
+      "description": "AI video generation platform that creates videos with digital presenters from text input. Specializes in corporate and educational content with customizable avatars.",
+      "pricing": "Starting at $29/month",
+      "tags": ["digital presenters", "corporate", "educational"]
+    },
+    {
+      "id": "nova-ai",
+      "title": "Nova A.I.",
+      "link": "https://wearenova.ai/",
+      "description": "Text to animation platform that creates animated explainer videos from text inputs. Features character customization, scene templates, and storyboard generation.",
+      "pricing": "Custom pricing",
+      "tags": ["animation", "explainer videos", "storyboarding"]
+    },
+    {
+      "id": "veed-io",
+      "title": "VEED.io",
+      "link": "https://www.veed.io/",
+      "description": "Online video editor with AI features including subtitle generation, background removal, text-to-speech, and noise reduction. User-friendly interface for all skill levels.",
+      "pricing": "Free tier available, Basic plan at $18/month",
+      "tags": ["online editor", "subtitles", "enhancement"]
+    },
+    {
+      "id": "invideo",
+      "title": "InVideo",
+      "link": "https://invideo.io/",
+      "description": "AI-powered video creation platform with thousands of templates, a media library, and automated video generation from text. Suitable for marketing and social media content.",
+      "pricing": "Free tier available, Business plan at $30/month",
+      "tags": ["templates", "marketing", "social media"]
+    }
+  ]
+}

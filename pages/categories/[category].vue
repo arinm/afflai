@@ -5,6 +5,12 @@
 
       <h1 class="category-page__title">{{ categoryName }} AI Tools</h1>
 
+      <CategoryAgent
+        v-if="categoryData"
+        :category-name="categoryName"
+        :category-data="categoryData"
+      />
+
       <div class="category-page__filters">
         <SearchBar
           v-model="searchQuery"

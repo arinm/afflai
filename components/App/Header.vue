@@ -138,11 +138,12 @@ watch(
 
 <style lang="scss">
 .header {
-  background-color: white;
+  background-color: #060a1d;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   position: sticky;
   top: 0;
   z-index: 100;
+  border-bottom: 1px solid #101a3d;
 
   &__inner {
     height: 70px;
