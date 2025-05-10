@@ -47,7 +47,7 @@ const emitSearch = () => {
 <style lang="scss">
 .search-bar {
   width: 100%;
-  max-width: 500px;
+  position: inherit;
 
   &__container {
     position: relative;
@@ -57,13 +57,14 @@ const emitSearch = () => {
 
   &__input {
     width: 100%;
-    padding: $spacing-sm $spacing-md;
+    padding: $spacing-md $spacing-md;
     padding-right: 3rem; // Make room for the button
     border: 1px solid $border-color;
     border-radius: $border-radius;
     font-size: $font-size-base;
     line-height: 1.5;
     transition: border-color $transition-normal, box-shadow $transition-normal;
+    border: 2px solid #cabff7;
 
     &:focus {
       outline: none;

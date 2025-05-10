@@ -1,5 +1,6 @@
 <template>
   <div class="home-page">
+    <!-- <Discover the Best AI Tools for Any Task /> -->
     <!-- Hero Section -->
     <section class="hero">
       <div class="container">
@@ -9,13 +10,6 @@
             Explore our curated collection of AI tools and applications to
             enhance your workflow and boost productivity.
           </p>
-          <div class="hero__search">
-            <SearchBar
-              v-model="searchQuery"
-              placeholder="Search for AI tools..."
-              @search="handleSearch"
-            />
-          </div>
           <div class="hero__actions">
             <NuxtLink to="/categories" class="btn btn-primary">
               Explore Categories
@@ -24,6 +18,13 @@
               Learn More
             </NuxtLink>
           </div>
+        </div>
+        <div class="hero__search">
+          <SearchBar
+            v-model="searchQuery"
+            placeholder="Search for AI tools..."
+            @search="handleSearch"
+          />
         </div>
       </div>
     </section>
@@ -45,6 +46,22 @@
             </div>
             <h3 class="category-card__title">{{ category.name }}</h3>
             <p class="category-card__description">{{ category.description }}</p>
+            <div class="category-card__arrow">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M5 12h14"></path>
+                <path d="m12 5 7 7-7 7"></path>
+              </svg>
+            </div>
           </NuxtLink>
         </div>
       </div>
@@ -85,7 +102,7 @@
           <article v-for="post in latestPosts" :key="post.id" class="blog-card">
             <div class="blog-card__image">
               <NuxtLink :to="`/blog/${post.slug}`">
-                <img :src="post.image" :alt="post.title" />
+                <!-- <img :src="post.image" :alt="post.title" /> -->
               </NuxtLink>
             </div>
             <div class="blog-card__content">
@@ -379,27 +396,29 @@ useHead({
 .home-page {
   // Hero section
   .hero {
-    background: linear-gradient(
-      135deg,
-      lighten($primary-color, 25%),
-      lighten($secondary-color, 20%)
-    );
-    padding: $spacing-3xl 0;
+    position: relative;
+    // background:
+    padding: $spacing-3xl 0 0;
     margin-bottom: $spacing-3xl;
 
     &__content {
-      max-width: 800px;
-      margin: 0 auto;
+      margin: 0 auto 86px;
       text-align: center;
     }
 
     &__title {
-      font-size: $font-size-3xl;
+      font-size: $font-size-4xl;
       color: $heading-color;
       margin-bottom: $spacing-md;
 
       @include breakpoint(md) {
-        font-size: $font-size-4xl;
+        font-size: 5rem;
+        font-weight: bold;
+        color: #ffffff;
+        line-height: 84px;
+        max-width: 85%;
+        margin: auto;
+        margin-bottom: 24px;
       }
     }
 
@@ -409,12 +428,12 @@ useHead({
       margin-bottom: $spacing-xl;
 
       @include breakpoint(md) {
-        font-size: $font-size-xl;
+        font-size: $font-size-2xl;
       }
     }
 
     &__search {
-      max-width: 600px;
+      max-width: 100%;
       margin: 0 auto $spacing-xl;
     }
 
@@ -442,6 +461,7 @@ useHead({
     color: $heading-color;
     margin-bottom: $spacing-lg;
     text-align: center;
+    color: #ffffff;
 
     @include breakpoint(md) {
       font-size: $font-size-3xl;
@@ -469,26 +489,139 @@ useHead({
 
   // Categories section
   .categories {
-    margin-bottom: $spacing-3xl;
+    margin: 4rem 0 6rem;
+    padding: 2rem 0;
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 2.5rem;
+      font-weight: 700;
+      text-align: center;
+      background: linear-gradient(135deg, #5c6bc0, #3949ab);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+
+      &::after {
+        content: "";
+        position: absolute;
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, #5c6bc0, #3949ab);
+        bottom: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 2px;
+      }
+    }
 
     &__grid {
       display: grid;
       grid-template-columns: repeat(1, 1fr);
-      gap: $spacing-md;
+      gap: 1.5rem;
 
-      @include breakpoint(sm) {
+      @media (min-width: 576px) {
         grid-template-columns: repeat(2, 1fr);
       }
 
-      @include breakpoint(md) {
+      @media (min-width: 768px) {
         grid-template-columns: repeat(3, 1fr);
       }
 
-      @include breakpoint(lg) {
+      @media (min-width: 992px) {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+      }
+
+      @media (min-width: 1200px) {
         grid-template-columns: repeat(6, 1fr);
-        gap: $spacing-lg;
       }
     }
+  }
+
+  .category-card {
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+
+      .category-card__icon {
+        transform: scale(1.1);
+        background: linear-gradient(135deg, #5c6bc0, #3949ab);
+
+        svg {
+          fill: white;
+          stroke: white;
+        }
+      }
+
+      .category-card__arrow {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    &__icon {
+      width: 70px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(92, 107, 192, 0.1);
+      border-radius: 50%;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+
+      svg {
+        width: 32px;
+        height: 32px;
+        color: #3949ab;
+        transition: all 0.3s ease;
+      }
+    }
+
+    &__title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: #1a1a1a;
+    }
+
+    &__description {
+      font-size: 0.95rem;
+      color: #666;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+      flex-grow: 1;
+    }
+
+    &__arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #3949ab;
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: all 0.3s ease;
+    }
+  }
+
+  .categories {
+    background-color: #f8fafc;
+    background-image: radial-gradient(#e0e6ff 1px, transparent 1px);
+    background-size: 30px 30px;
   }
 
   .category-card {
@@ -518,7 +651,7 @@ useHead({
     }
 
     &__title {
-      font-size: $font-size-lg;
+      font-size: $font-size-2xl;
       font-weight: $font-weight-semibold;
       margin-bottom: $spacing-xs;
       color: $heading-color;

@@ -1,4 +1,6 @@
 // Import base styles
+@import 'normalize';
+@import 'reset';
 @import 'variables';
 @import 'mixins';
 
@@ -19,6 +21,20 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  &:after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 20%;
+    background-color: #0e1730;
+    z-index: -1;
+    margin: auto;
+    left: 0;
+    right: 0;
+    filter: blur(200px);
+  }
 }
 
 // Typography
@@ -58,7 +74,7 @@ a {
 // Container
 .container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 1rem;
   

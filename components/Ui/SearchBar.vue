@@ -57,18 +57,19 @@ const emitSearch = () => {
 
   &__input {
     width: 100%;
-    padding: $spacing-sm $spacing-md;
-    padding-right: 3rem; // Make room for the button
+    padding: $spacing-md $spacing-lg;
+    padding-right: 3.5rem; // Make room for the button
     border: 1px solid $border-color;
-    border-radius: $border-radius;
-    font-size: $font-size-base;
+    border-radius: $border-radius-lg;
+    font-size: $font-size-lg;
     line-height: 1.5;
     transition: border-color $transition-normal, box-shadow $transition-normal;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     &:focus {
       outline: none;
       border-color: $primary-color;
-      box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.2);
     }
 
     &::placeholder {
@@ -78,27 +79,30 @@ const emitSearch = () => {
 
   &__button {
     position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 3rem;
-    background: none;
+    width: 3.5rem;
+    height: 3.5rem;
+    background: linear-gradient(135deg, $primary-color, $secondary-color);
     border: none;
+    border-radius: 50%;
     cursor: pointer;
-    color: $text-color-secondary;
-    transition: color $transition-normal;
+    color: $text-color-light;
+    transition: background $transition-normal, transform $transition-normal;
 
     &:hover {
-      color: $primary-color;
+      background: linear-gradient(135deg, $secondary-color, $primary-color);
+      transform: scale(1.05);
     }
   }
 
   &__icon {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
   }
 }
 </style>
