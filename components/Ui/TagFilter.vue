@@ -1,104 +1,63 @@
 <template>
-  <div class="search-bar">
-    <div class="search-bar__container">
-      <input
-        type="text"
-        class="search-bar__input"
-        :placeholder="placeholder"
-        :value="modelValue"
-        @input="updateValue"
-        @keyup.enter="emitSearch"
-      />
-      <button
-        class="search-bar__button"
-        @click="emitSearch"
-        aria-label="Search"
-      >
-        <IconSearch class="search-bar__icon" />
-      </button>
-    </div>
+  <div class="tag-filter">
+    <button
+      v-for="tag in tags"
+      :key="tag"
+      type="button"
+      class="tag-filter__tag"
+      :class="{ 'tag-filter__tag--selected': selectedTags.includes(tag) }"
+      @click="emitToggle(tag)"
+    >
+      {{ tag }}
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
+import { PropType } from 'vue';
+
 const props = defineProps({
-  modelValue: {
-    type: String,
-    default: "",
+  tags: {
+    type: Array as PropType<string[]>,
+    default: () => [],
   },
-  placeholder: {
-    type: String,
-    default: "Search...",
+  selectedTags: {
+    type: Array as PropType<string[]>,
+    default: () => [],
   },
 });
 
-const emit = defineEmits(["update:modelValue", "search"]);
+const emit = defineEmits(['toggle']);
 
-const updateValue = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  emit("update:modelValue", target.value);
-};
-
-const emitSearch = () => {
-  emit("search", props.modelValue);
-};
+function emitToggle(tag: string) {
+  emit('toggle', tag);
+}
 </script>
 
 <style lang="scss">
-.search-bar {
-  width: 100%;
-  max-width: 500px;
+.tag-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
 
-  &__container {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-
-  &__input {
-    width: 100%;
-    padding: $spacing-sm $spacing-md;
-    padding-right: 3rem; // Make room for the button
-    border: 1px solid $border-color;
-    border-radius: $border-radius;
-    font-size: $font-size-base;
-    line-height: 1.5;
-    transition: border-color $transition-normal, box-shadow $transition-normal;
-
-    &:focus {
-      outline: none;
-      border-color: $primary-color;
-      box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
-    }
-
-    &::placeholder {
-      color: $text-color-secondary;
-    }
-  }
-
-  &__button {
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 3rem;
-    background: none;
+  &__tag {
+    background-color: $tag-bg;
+    color: $tag-color;
+    font-size: $font-size-xs;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $border-radius-full;
     border: none;
     cursor: pointer;
-    color: $text-color-secondary;
-    transition: color $transition-normal;
+    transition: background-color $transition-fast;
+
+    &--selected {
+      background-color: $primary-color;
+      color: white;
+    }
 
     &:hover {
-      color: $primary-color;
+      background-color: darken($tag-bg, 5%);
     }
-  }
-
-  &__icon {
-    width: 1.25rem;
-    height: 1.25rem;
   }
 }
 </style>
